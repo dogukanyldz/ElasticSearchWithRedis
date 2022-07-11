@@ -33,7 +33,7 @@ namespace ElasticSearchWeb.Api
                 .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(configuration.GetValue<string>("ElastiSearch")))
                 {
                     CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
-                  
+
                     AutoRegisterTemplate = true,
                     IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
                 })
@@ -53,10 +53,16 @@ namespace ElasticSearchWeb.Api
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+              Host.CreateDefaultBuilder(args)
+                  .ConfigureWebHostDefaults(webBuilder =>
+                  {
+                      webBuilder.UseStartup<Startup>();
+                  }).ConfigureAppConfiguration(configuration =>
+                  {
+                      configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                      configuration.AddJsonFile(
+                          $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true);
+                  })
+          .UseSerilog();
+    } 
 }

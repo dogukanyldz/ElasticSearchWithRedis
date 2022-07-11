@@ -68,7 +68,6 @@ namespace ElasticSearchWeb.Api
             }
             
 
-
             app.UseHttpsRedirection();
 
             app.UseRouting();

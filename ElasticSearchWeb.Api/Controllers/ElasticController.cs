@@ -56,7 +56,8 @@ namespace ElasticSearchWeb.Api.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            _logger.LogInformation("test");
+            _logger.LogWarning("warrrrrrr");
+            _logger.LogInformation("Infooooooooo");
             //var albums = await _elasticClient.SearchAsync<Album>(s => s.Query(q=> q.Bool(b=> b.Must(m=> m.Exists(e=> e.Field(f=> f.Id))))));
 
             var request = await _elasticClient.SearchAsync<Album>(s => s.From(0).Size(1000).MatchAll());
